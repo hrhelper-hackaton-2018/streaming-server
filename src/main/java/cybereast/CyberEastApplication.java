@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CyberEastApplicsation {
+public class CyberEastApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(CyberEastApplicsation.class, args);
+    SpringApplication.run(CyberEastApplication.class, args);
   }
 }
