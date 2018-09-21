@@ -1,12 +1,15 @@
 package cybereast.controller;
 
+import cybereast.model.FileView;
 import cybereast.service.StorageFileNotFoundException;
 import cybereast.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.stream.Collectors;
 
 @RestController
@@ -53,15 +57,16 @@ public class VideoController {
         "attachment; filename=\"" + file.getFilename() + "\"").body(file);
   }
 
-  @PostMapping("/")
-  public String handleFileUpload(@RequestParam("file") MultipartFile file,
+  @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+  public FileView handleFileUpload(@RequestParam("file") MultipartFile file,
       RedirectAttributes redirectAttributes) {
 
     storageService.store(file);
     redirectAttributes.addFlashAttribute("message",
         "You successfully uploaded " + file.getOriginalFilename() + "!");
+    String hostName = InetAddress.getLoopbackAddress().getHostName();
 
-    return "redirect:/";
+    return new FileView(file.getOriginalFilename(), String.format("http://%s/files/%s", hostName, file.getOriginalFilename()));
   }
 
   @ExceptionHandler(StorageFileNotFoundException.class)
