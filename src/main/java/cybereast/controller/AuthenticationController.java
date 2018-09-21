@@ -7,12 +7,7 @@ import cybereast.service.UserAuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -25,21 +20,35 @@ public class AuthenticationController {
 
   @PostMapping(value = "/login", produces = "application/json")
   public RolePayload login(@RequestBody UserLoginPayload payload, HttpServletResponse response) {
-      Pair<String, String> roleTokenPair = userAuthService.login(payload);
+      Pair<String, UserModel> roleTokenPair = userAuthService.login(payload);
       response.addCookie(new Cookie("hr_helper_auth_token", roleTokenPair.getFirst()));
-      return new RolePayload(roleTokenPair.getSecond());
+      UserModel user = roleTokenPair.getSecond();
+      return new RolePayload(user.getRole().name(), user.getEmail(), user.getUserName());
   }
 
   @PostMapping(value = "/register", produces = "application/json")
   public RolePayload register(@RequestBody UserRegisterPayload payload, HttpServletResponse response) {
-      Pair<String, String> roleTokenPair = userAuthService.register(payload);
+      Pair<String, UserModel> roleTokenPair = userAuthService.register(payload);
       response.addCookie(new Cookie("hr_helper_auth_token", roleTokenPair.getFirst()));
-      return new RolePayload(roleTokenPair.getSecond());
+      UserModel user = roleTokenPair.getSecond();
+      return new RolePayload(user.getRole().name(), user.getEmail(), user.getUserName());
+  }
+
+  @GetMapping(value = "/me", consumes = "application/json")
+  public UserModel me(@CookieValue("hr_helper_auth_token") String token) {
+      return userAuthService.getUser(token);
+  }
+
+  @GetMapping(value = "/user", consumes = "application/json")
+  public UserModel getUser(String token) {
+      return userAuthService.getUser(token);
   }
 
   @AllArgsConstructor
   public static class RolePayload {
       public String role;
+      public String email;
+      public String userName;
   }
 
 }

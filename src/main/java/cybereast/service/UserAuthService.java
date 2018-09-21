@@ -21,14 +21,14 @@ public class UserAuthService {
     @Autowired
     private UserTokenRepository userTokenRepository;
 
-    public Pair<String, String> register(UserRegisterPayload payload) {
+    public Pair<String, UserModel> register(UserRegisterPayload payload) {
 
         if (!payload.getPassword().equals(payload.getRepeatedPassword())) {
             throw new SecurityException("Passwords are not equal!");
         }
 
         UserModel user = UserModel.builder()
-                .login(payload.getLogin())
+                .userName(payload.getUserName())
                 .email(payload.getEmail())
                 .password(payload.getPassword())
                 .role(payload.getRole())
@@ -39,13 +39,13 @@ public class UserAuthService {
         UserTokenModel token = UserTokenModel.builder().token(RandomStringUtils.random(128)).user(user).build();
         userTokenRepository.save(token);
 
-        return Pair.of(token.getToken(), user.getRole().name());
+        return Pair.of(token.getToken(), user);
 
     }
 
-    public Pair<String, String> login(UserLoginPayload payload) {
+    public Pair<String, UserModel> login(UserLoginPayload payload) {
 
-        UserModel userModel = userRepository.findByEmailOrLogin(payload.getLogin(), payload.getLogin());
+        UserModel userModel = userRepository.findByEmailOrUserName(payload.getUserName(), payload.getUserName());
 
         if (!userModel.getPassword().equals(payload.getPassword())) {
             throw new SecurityException("Wrong password!");
@@ -54,7 +54,15 @@ public class UserAuthService {
         UserTokenModel token = UserTokenModel.builder().token(RandomStringUtils.random(128)).user(userModel).build();
         userTokenRepository.save(token);
 
-        return Pair.of(token.getToken(), userModel.getRole().name());
+        return Pair.of(token.getToken(), userModel);
+
+    }
+
+    public UserModel getUser(String tokenCookie) {
+
+        UserTokenModel token = userTokenRepository.findByToken(tokenCookie);
+
+        return token.getUser();
 
     }
 

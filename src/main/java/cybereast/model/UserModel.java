@@ -17,7 +17,7 @@ public class UserModel {
     private String id;
 
     @Indexed(unique = true)
-    private String login;
+    private String userName;
 
     @Indexed(unique = true)
     private String email;

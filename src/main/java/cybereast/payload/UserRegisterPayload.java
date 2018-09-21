@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRegisterPayload {
 
-    private String login;
+    private String userName;
     private String email;
     private String password;
     private String repeatedPassword;
