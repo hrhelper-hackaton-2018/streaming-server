@@ -34,12 +34,12 @@ public class AuthenticationController {
       return new RolePayload(user.getRole().name(), user.getEmail(), user.getUserName());
   }
 
-  @GetMapping(value = "/me", consumes = "application/json")
+  @GetMapping(value = "/me")
   public UserModel me(@CookieValue("hr_helper_auth_token") String token) {
       return userAuthService.getUser(token);
   }
 
-  @GetMapping(value = "/user", consumes = "application/json")
+  @GetMapping(value = "/user")
   public UserModel getUser(String token) {
       return userAuthService.getUser(token);
   }
