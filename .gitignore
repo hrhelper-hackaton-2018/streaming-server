@@ -14,7 +14,7 @@
 
 # Package Files #
 # *.jar
-target/cybereasthackaton-1.0-SNAPSHOT.jar
+target/
 *.war
 *.nar
 *.ear
