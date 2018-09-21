@@ -7,8 +7,8 @@ cybereast/payload/UserRegisterPayload.class
 cybereast/config/WebConfig.class
 cybereast/CyberEastApplication.class
 cybereast/service/UserAuthService.class
-cybereast/model/UserTokenModel$UserTokenModelBuilder.class
 cybereast/model/UserTokenModel.class
+cybereast/model/UserTokenModel$UserTokenModelBuilder.class
 cybereast/controller/AuthenticationController$RolePayload.class
 cybereast/config/DataStoreConfig.class
 cybereast/repository/UserTokenRepository.class
