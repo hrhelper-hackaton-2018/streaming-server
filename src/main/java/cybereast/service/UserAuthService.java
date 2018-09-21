@@ -7,9 +7,9 @@ import cybereast.payload.UserLoginPayload;
 import cybereast.payload.UserRegisterPayload;
 import cybereast.repository.UserRepository;
 import cybereast.repository.UserTokenRepository;
-import javafx.util.Pair;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,7 +39,7 @@ public class UserAuthService {
         UserTokenModel token = UserTokenModel.builder().token(RandomStringUtils.random(128)).user(user).build();
         userTokenRepository.save(token);
 
-        return new Pair<>(token.getToken(), user.getRole().name());
+        return Pair.of(token.getToken(), user.getRole().name());
 
     }
 
@@ -54,7 +54,7 @@ public class UserAuthService {
         UserTokenModel token = UserTokenModel.builder().token(RandomStringUtils.random(128)).user(userModel).build();
         userTokenRepository.save(token);
 
-        return new Pair<>(token.getToken(), userModel.getRole().name());
+        return Pair.of(token.getToken(), userModel.getRole().name());
 
     }
 
