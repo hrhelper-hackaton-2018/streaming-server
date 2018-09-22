@@ -48,7 +48,7 @@ public class VideoController {
     return "uploadForm";
   }
 
-  @GetMapping("/files/{filename:.+}")
+  @GetMapping("/get/{filename:.+}")
   @ResponseBody
   public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
@@ -66,7 +66,9 @@ public class VideoController {
         "You successfully uploaded " + file.getOriginalFilename() + "!");
     String hostName = InetAddress.getLoopbackAddress().getHostName();
 
-    return new FileView(file.getOriginalFilename(), String.format("http://%s/files/%s", hostName, file.getOriginalFilename()));
+    //return new FileView(file.getOriginalFilename(), String.format("http://localhost:8040/files/%s", file.getOriginalFilename()));
+
+    return new FileView(file.getOriginalFilename(), String.format("http://prosto.ai/files/get/%s", file.getOriginalFilename()));
   }
 
   @ExceptionHandler(StorageFileNotFoundException.class)
