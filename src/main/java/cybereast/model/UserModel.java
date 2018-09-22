@@ -26,4 +26,10 @@ public class UserModel {
 
     private UserRole role;
 
+    private String firstName;
+
+    private String lastName;
+
+    private Integer age;
+
 }

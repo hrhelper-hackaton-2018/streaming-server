@@ -23,7 +23,7 @@ public class AuthenticationController {
       Pair<String, UserModel> roleTokenPair = userAuthService.login(payload);
       response.addCookie(new Cookie("hr_helper_auth_token", roleTokenPair.getFirst()));
       UserModel user = roleTokenPair.getSecond();
-      return new RolePayload(user.getRole().name(), user.getEmail(), user.getUserName());
+      return new RolePayload(user.getRole().name(), user.getEmail(), user.getUserName(), user.getFirstName(), user.getLastName(), user.getAge());
   }
 
   @PostMapping(value = "/register", produces = "application/json")
@@ -31,11 +31,12 @@ public class AuthenticationController {
       Pair<String, UserModel> roleTokenPair = userAuthService.register(payload);
       response.addCookie(new Cookie("hr_helper_auth_token", roleTokenPair.getFirst()));
       UserModel user = roleTokenPair.getSecond();
-      return new RolePayload(user.getRole().name(), user.getEmail(), user.getUserName());
+      return new RolePayload(user.getRole().name(), user.getEmail(), user.getUserName(), user.getFirstName(), user.getLastName(), user.getAge());
   }
 
   @GetMapping(value = "/me")
-  public UserModel me(@CookieValue("hr_helper_auth_token") String token) {
+  public UserModel me(@CookieValue("hr_helper_auth_token") String token) throws Exception {
+//      userAuthService.transcribeFileWithAutomaticPunctuation();
       return userAuthService.getUser(token);
   }
 
@@ -49,6 +50,9 @@ public class AuthenticationController {
       public String role;
       public String email;
       public String userName;
+      public String firstName;
+      public String lastName;
+      public Integer age;
   }
 
 }
